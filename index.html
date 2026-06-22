@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Randka? ✨</title>
+    <!-- Biblioteka EmailJS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function(){ emailjs.init({ publicKey: '7RmEmf2FQKBKlri15' }); })();
+    </script>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(to bottom, #4a148c, #e1bee7); color: white; }
+        .container { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 2rem; border-radius: 20px; text-align: center; box-shadow: 0 8px 32px rgba(0,0,0,0.3); position: relative; width: 350px; height: 350px; overflow: hidden; }
+        button { padding: 15px 25px; font-size: 1.1rem; cursor: pointer; border: none; border-radius: 50px; margin: 10px; font-weight: bold; transition: transform 0.2s; }
+        button:hover { transform: scale(1.05); }
+        #yesBtn { background: white; color: #4a148c; }
+        #noBtn { background: #ff5252; color: white; position: absolute; top: 150px; left: 200px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+        .grid button { width: 100%; margin: 0; font-size: 0.8rem; padding: 10px; }
+        input { padding: 10px; border-radius: 5px; border: none; margin-bottom: 20px; color: #4a148c; }
+    </style>
+</head>
+<body>
+    <div class="container" id="content">
+        <h1>Wybierasz się ze mną na randkę? 😊</h1>
+        <button id="yesBtn" onclick="showYay()">TAK! ✨</button>
+        <button id="noBtn" onmouseover="moveButton()">NIE</button>
+    </div>
+
+    <script>
+        let dateValue = "";
+
+        function moveButton() {
+            const btn = document.getElementById('noBtn');
+            const maxX = 350 - 100; 
+            const maxY = 350 - 60; 
+            btn.style.left = (Math.random() * maxX) + 'px';
+            btn.style.top = (Math.random() * maxY) + 'px';
+        }
+
+        function showYay() {
+            document.getElementById('content').innerHTML = "<h1>YAY! 🎉✨</h1>";
+            setTimeout(showCalendar, 1500);
+        }
+
+        function showCalendar() {
+            document.getElementById('content').innerHTML = `
+                <h2>Wybierz datę:</h2>
+                <input type="date" id="dateInput"><br>
+                <button onclick="saveDate()">Dalej</button>
+            `;
+        }
+
+        function saveDate() {
+            dateValue = document.getElementById('dateInput').value;
+            if(!dateValue) return alert("Wybierz datę!");
+            showOptions();
+        }
+
+        function showOptions() {
+            document.getElementById('content').innerHTML = `
+                <h2>Rodzaj randki:</h2>
+                <div class="grid">
+                    <button style="background:#ff8a65" onclick="finish('Kawa i ciacho ☕')">Kawa i ciacho ☕</button>
+                    <button style="background:#4db6ac" onclick="finish('Obiad 🍽️')">Obiad 🍽️</button>
+                    <button style="background:#fff176" onclick="finish('Piknik 🧺')">Piknik 🧺</button>
+                    <button style="background:#64b5f6" onclick="finish('Wycieczka 🚗')">Wycieczka 🚗</button>
+                    <button style="background:#ba68c8" onclick="finish('Adventure 🧗')">Adventure 🧗</button>
+                    <button style="background:#e57373" onclick="finish('Zaskocz mnie 🎁')">Zaskocz mnie 🎁</button>
+                </div>
+            `;
+        }
+
+        function finish(type) {
+            // Wysłanie maila przez EmailJS
+            emailjs.send("service_1ofxxlv", "template_ovnv2ct", {
+                type: type,
+                date: dateValue
+            }).then(() => {
+                document.getElementById('content').innerHTML = `
+                    <h1>Do zobaczenia! 🥰</h1>
+                    <p>Wybrano: <b>${type}</b></p>
+                    <p>Data: <b>${dateValue}</b></p>
+                    <p>Potwierdzenie wyslane do nas na email 😉</b></p>
+
+                `;
+            }).catch((err) => {
+                alert("Błąd wysyłki: " + JSON.stringify(err));
+            });
+        }
+    </script>
+</body>
+</html>
