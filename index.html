@@ -75,18 +75,27 @@
             `;
         }
 
-        function finish(type) {
+function finish(type) {
+            const dateObj = new Date(dateValue);
+            const cleanDate = dateValue.replace(/-/g, "");
+            
+            // Obliczamy datę następnego dnia, aby wydarzenie trwało dokładnie jeden dzień
+            const nextDay = new Date(dateObj);
+            nextDay.setDate(nextDay.getDate() + 1);
+            const nextDateClean = nextDay.toISOString().split('T')[0].replace(/-/g, "");
+            
             // Wysłanie maila przez EmailJS
             emailjs.send("service_1ofxxlv", "template_ovnv2ct", {
                 type: type,
-                date: dateValue
+                date: dateValue,
+                dateStart: cleanDate,
+                dateEnd: nextDateClean
             }).then(() => {
                 document.getElementById('content').innerHTML = `
                     <h1>Do zobaczenia! 🥰</h1>
                     <p>Wybrano: <b>${type}</b></p>
                     <p>Data: <b>${dateValue}</b></p>
                     <p>Potwierdzenie wyslane do nas na email 😉</b></p>
-
                 `;
             }).catch((err) => {
                 alert("Błąd wysyłki: " + JSON.stringify(err));
