@@ -23,9 +23,9 @@
 </head>
 <body>
     <div class="container" id="content">
-        <h1>Hey Mila 😉 Fancy a date with me?😊</h1>
-        <button id="yesBtn" onclick="showYay()">YES! ✨</button>
-        <button id="noBtn" onmouseover="moveButton()">NO</button>
+        <h1>Hey Mila 😉 <br> Dasz porwac sie na na randkę? 😊</br></h1>
+        <button id="yesBtn" onclick="showYay()">TAK! ✨</button>
+        <button id="noBtn" onmouseover="moveButton()">NIE</button>
     </div>
 
     <script>
@@ -45,9 +45,12 @@
         }
 
         function showCalendar() {
+            // Pobieramy dzisiejszą datę w formacie YYYY-MM-DD
+            const today = new Date().toISOString().split('T')[0];
+            
             document.getElementById('content').innerHTML = `
                 <h2>Wybierz datę:</h2>
-                <input type="date" id="dateInput"><br>
+                <input type="date" id="dateInput" min="${today}"><br>
                 <button onclick="saveDate()">Dalej</button>
             `;
         }
